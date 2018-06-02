@@ -2,10 +2,11 @@ package nx584
 
 import (
 	"bufio"
+	"encoding/hex"
 	"errors"
-	"fmt"
 	"io"
 	"log"
+	"strings"
 
 	"github.com/tarm/serial"
 )
@@ -40,9 +41,12 @@ func Open(config *Config) (*Client, error) {
 		return nil, err
 	}
 
+	scanner := bufio.NewScanner(port)
+	scanner.Split(ScanMessages)
+
 	client := &Client{
 		port:    port,
-		scanner: bufio.NewScanner(port),
+		scanner: scanner,
 	}
 
 	return client, nil
@@ -54,12 +58,12 @@ func (client *Client) ReadMessage() (Message, error) {
 		return nil, io.EOF
 	}
 
-	ascii := client.scanner.Bytes()
+	ascii := client.scanner.Text()
 	if len(ascii) == 0 {
 		return nil, errors.New("message was empty")
 	}
 
-	bytes, err := asciiHexToBytes(ascii)
+	bytes, err := hex.DecodeString(ascii)
 	if err != nil {
 		return nil, err
 	}
@@ -82,12 +86,8 @@ func (client *Client) WriteMessage(message Message) error {
 	bytes := EncodeMessage(message)
 	log.Printf("encoding message: %#v", bytes)
 
-	ascii, err := bytesToAsciiHex(bytes)
-	if err != nil {
-		return err
-	}
-
-	_, err = client.port.Write(ascii)
+	ascii := strings.ToUpper(hex.EncodeToString(bytes))
+	_, err := client.port.Write([]byte(ascii))
 	if err != nil {
 		return err
 	}
@@ -97,58 +97,4 @@ func (client *Client) WriteMessage(message Message) error {
 
 func (client *Client) Close() error {
 	return client.port.Close()
-}
-
-func asciiHexToBytes(ascii []byte) ([]byte, error) {
-	bytes := make([]byte, len(ascii)/2)
-	for n, _ := range bytes {
-		i := n * 2
-		higher, err := asciiHexToByte(ascii[i])
-		if err != nil {
-			return nil, err
-		}
-		lower, err := asciiHexToByte(ascii[i+1])
-		if err != nil {
-			return nil, err
-		}
-		bytes[n] = (higher << 4) + lower
-	}
-	return bytes, nil
-}
-
-func asciiHexToByte(ascii byte) (byte, error) {
-	if ascii >= 48 && ascii <= 57 {
-		return ascii - 48, nil
-	}
-	if ascii >= 65 && ascii <= 70 {
-		return ascii - 65 + 10, nil
-	}
-	return 0, fmt.Errorf("byte %#v not in ascii hex range", ascii)
-}
-
-func bytesToAsciiHex(bytes []byte) ([]byte, error) {
-	ascii := make([]byte, len(bytes)*2)
-	for i, b := range bytes {
-		higher, err := byteToAsciiHex(b >> 4)
-		if err != nil {
-			return nil, err
-		}
-		ascii[i*2] = higher
-		lower, err := byteToAsciiHex(b & 0x0F)
-		if err != nil {
-			return nil, err
-		}
-		ascii[(i*2)+1] = lower
-	}
-	return ascii, nil
-}
-
-func byteToAsciiHex(b byte) (byte, error) {
-	if b >= 0 && b <= 9 {
-		return b + 48, nil
-	}
-	if b >= 10 && b <= 15 {
-		return b + 65, nil
-	}
-	return 0, fmt.Errorf("byte %#v not in ascii hex range", b)
 }

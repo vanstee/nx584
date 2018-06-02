@@ -40,25 +40,22 @@ func main() {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			log.Printf("error reading message: %v", err)
+			log.Fatalf("error reading message: %v", err)
 		}
 
-		var resp nx584.Message
-		switch message := req.(type) {
-		case *nx584.PartitionStatusMessage:
-			resp = &nx584.PositiveAcknowledge{
-				&nx584.BaseMessage{
-					Length: 1,
-					Number: message.Number(),
-				},
+		switch req.(type) {
+		case *nx584.ZoneStatusMessage:
+			resp, err := nx584.NewPositiveAcknowledge(1, false, []byte{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			err = client.WriteMessage(resp)
+			if err != nil {
+				log.Fatal(err)
 			}
 		default:
 			log.Fatal("message type unknown")
-		}
-
-		err = client.WriteMessage(resp)
-		if err != nil {
-			log.Fatal(err)
 		}
 	}
 }

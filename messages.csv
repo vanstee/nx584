@@ -1,0 +1,65 @@
+Number,Name,Length,Transition Capable,Acknowledged
+0,Do Not Use,0,No,No
+1,Interface Configuration Message,11,No,Possible
+2,Reserved,0,No,No
+3,Zone Name Message,18,No,No
+4,Zone Status Message,8,Yes,Possible
+5,Zone Snapshot Message,10,Yes,Possible
+6,Partition Status Message,9,Yes,Possible
+7,Partitions Snapshot Message,9,Yes,Possible
+8,System Status Message,12,Yes,Possible
+9,X-10 Message Received,4,Yes,Yes
+10,Log Event Message,10,Yes,Possible
+11,Keypad Message Received,3,Yes,Yes
+12,Reserved,0,No,No
+13,Reserved,0,No,No
+14,Reserved,0,No,No
+15,Reserved,0,No,No
+16,Program Data Reply,13,No,No
+17,Reserved,0,No,No
+18,User Information Reply,7,No,No
+19,Reserved,0,No,No
+20,Reserved,0,No,No
+21,Reserved,0,No,No
+22,Reserved,0,No,No
+23,Reserved,0,No,No
+24,Reserved,0,No,No
+25,Reserved,0,No,No
+26,Reserved,0,No,No
+27,Reserved,0,No,No
+28,Command / Request Failed,1,No,No
+29,Positive Acknowledge,1,No,No
+30,Negative Acknowledge,1,No,No
+31,Message Rejected,1,No,No
+32,Reserved,0,No,No
+33,Interface Configuration Request,1,No,No
+34,Reserved,0,No,No
+35,Zone Name Request,2,No,No
+36,Zone Status Request,2,No,No
+37,Zones Snapshot Request,2,No,No
+38,Partition Status Request,2,No,No
+39,Partitions Snapshot Request,1,No,No
+40,System Status Request,1,No,No
+41,Send X-10 Request,4,No,Yes
+42,Log Event Request,2,No,No
+43,Send Keypad Text Message,12,No,Yes
+44,Keypad Terminal Mode Request,3,No,Yes
+45,Reserved,0,No,No
+46,Reserved,0,No,No
+47,Reserved,0,No,No
+48,Program Data Request,4,No,No
+49,Program Data Command,13,No,Yes
+50,User Information Request with PIN,5,No,No
+51,User Information Request without PIN,2,No,No
+52,Set User Code Command with PIN,8,No,Yes
+53,Set User Code Command without PIN,5,No,Yes
+54,Set User Authorization Command with PIN,7,No,Yes
+55,Set User Authorization Command without PIN,4,No,Yes
+56,Reserved,0,No,No
+57,Reserved,0,No,No
+58,Store Communication Event Command,6,No,Yes
+59,Set Clock / Calendar Command,7,No,Yes
+60,Primary Keypad Function with PIN,6,No,Yes
+61,Primary Keypad Function without PIN,4,No,Yes
+62,Secondary Keypad Function,3,No,Yes
+63,Zone Bypass Toggle,2,No,Yes
