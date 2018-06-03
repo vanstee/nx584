@@ -41,7 +41,7 @@ func New{{.FieldifiedName}}(length byte, acknowledgeRequired bool, data []byte) 
 		{{$byte := .Byte}}
 		{{.FieldifiedName}}: data[{{$byte}}],
 		{{- range .DataBitFields}}
-		{{.FieldifiedName}}: (data[{{$byte}}] >> (7 - {{.Bit}})) & 0x1,
+		{{.FieldifiedName}}: (data[{{$byte}}] >> {{.Bit}}) & 0x1,
 		{{- end}}
 		{{- end}}
 	}
