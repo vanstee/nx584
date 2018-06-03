@@ -18,6 +18,7 @@ const (
 
 type ZoneStatusRequest struct {
 	*BaseMessage
+	ZoneNumber byte
 }
 
 func NewZoneStatusRequest(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
@@ -31,6 +32,8 @@ func NewZoneStatusRequest(length byte, acknowledgeRequired bool, data []byte) (M
 			acknowledgeRequired: acknowledgeRequired,
 			data:                data,
 		},
+
+		ZoneNumber: data[0],
 	}
 
 	return message, nil
@@ -43,8 +46,10 @@ func (m *ZoneStatusRequest) Number() byte {
 func (m *ZoneStatusRequest) String() string {
 	return fmt.Sprintf(
 		`%s
-                    %s`,
+                    %s
+                    Zone Number: %08b`,
 		"Zone Status Request",
 		strings.Repeat("-", len("Zone Status Request")),
+		m.ZoneNumber,
 	)
 }

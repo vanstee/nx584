@@ -5,7 +5,7 @@ var (
 		InterfaceConfigurationMessageNumber:         NewInterfaceConfigurationMessage,
 		ZoneNameMessageNumber:                       NewZoneNameMessage,
 		ZoneStatusMessageNumber:                     NewZoneStatusMessage,
-		ZoneSnapshotMessageNumber:                   NewZoneSnapshotMessage,
+		ZonesSnapshotMessageNumber:                  NewZonesSnapshotMessage,
 		PartitionStatusMessageNumber:                NewPartitionStatusMessage,
 		PartitionsSnapshotMessageNumber:             NewPartitionsSnapshotMessage,
 		SystemStatusMessageNumber:                   NewSystemStatusMessage,

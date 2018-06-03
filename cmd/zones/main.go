@@ -75,6 +75,31 @@ func main() {
 	}
 	log.Printf("done handling stale messages")
 
+	req, err := nx584.NewZonesSnapshotRequest(2, false, []byte{0x0})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("sending zones snapshot request")
+	err = client.WriteMessage(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("waiting for zones snapshot message")
+	select {
+	case resp := <-messages:
+		if _, ok := resp.(*nx584.ZonesSnapshotMessage); !ok {
+			log.Fatal("expected zones snapshot message")
+		}
+
+		log.Printf(resp.String())
+	case err := <-errc:
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	for i := 0; i < 16; i++ {
 		req, err := nx584.NewZoneNameRequest(2, false, []byte{byte(i)})
 		if err != nil {
@@ -87,7 +112,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		log.Printf("waiting for zone name message response")
+		log.Printf("waiting for zone name message")
 		select {
 		case resp := <-messages:
 			if _, ok := resp.(*nx584.ZoneNameMessage); !ok {
@@ -107,6 +132,31 @@ func main() {
 				string(name),
 				name,
 			)
+		case err := <-errc:
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+
+		req, err = nx584.NewZoneStatusRequest(2, false, []byte{byte(i)})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Printf("sending zone status request")
+		err = client.WriteMessage(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Printf("waiting for zone status message")
+		select {
+		case resp := <-messages:
+			if _, ok := resp.(*nx584.ZoneStatusMessage); !ok {
+				log.Fatal("expected zone status message")
+			}
+
+			log.Printf(resp.String())
 		case err := <-errc:
 			if err != nil {
 				log.Fatal(err)
