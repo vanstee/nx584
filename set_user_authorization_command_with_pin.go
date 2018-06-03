@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type SetUserAuthorizationCommandWithPin struct {
 
 func NewSetUserAuthorizationCommandWithPin(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != SetUserAuthorizationCommandWithPinLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", SetUserAuthorizationCommandWithPinLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", SetUserAuthorizationCommandWithPinLength, length)
 	}
 
 	message := &SetUserAuthorizationCommandWithPin{

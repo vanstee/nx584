@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type KeypadMessageReceived struct {
 
 func NewKeypadMessageReceived(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != KeypadMessageReceivedLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", KeypadMessageReceivedLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", KeypadMessageReceivedLength, length)
 	}
 
 	message := &KeypadMessageReceived{

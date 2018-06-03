@@ -4,13 +4,12 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
 const (
 	ZoneStatusMessageName              = "Zone Status Message"
-	ZoneStatusMessageLength            = 8
+	ZoneStatusMessageLength            = 10
 	ZoneStatusMessageNumber            = 4
 	ZoneStatusMessageTransitionCapable = TransitionCapableYes
 	ZoneStatusMessageAcknowledged      = AcknowledgedPossible
@@ -70,7 +69,7 @@ type ZoneStatusMessage struct {
 
 func NewZoneStatusMessage(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != ZoneStatusMessageLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", ZoneStatusMessageLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", ZoneStatusMessageLength, length)
 	}
 
 	message := &ZoneStatusMessage{

@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -28,7 +27,7 @@ type {{.FieldifiedName}} struct {
 
 func New{{.FieldifiedName}}(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != {{.FieldifiedName}}Length {
-		log.Printf("message length incorrect: expected %d, actual: %d", {{.FieldifiedName}}Length, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", {{.FieldifiedName}}Length, length)
 	}
 
 	message := &{{.FieldifiedName}}{

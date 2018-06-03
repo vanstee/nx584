@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -23,7 +22,7 @@ type ZonesSnapshotRequest struct {
 
 func NewZonesSnapshotRequest(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != ZonesSnapshotRequestLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", ZonesSnapshotRequestLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", ZonesSnapshotRequestLength, length)
 	}
 
 	message := &ZonesSnapshotRequest{

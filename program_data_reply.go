@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type ProgramDataReply struct {
 
 func NewProgramDataReply(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != ProgramDataReplyLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", ProgramDataReplyLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", ProgramDataReplyLength, length)
 	}
 
 	message := &ProgramDataReply{

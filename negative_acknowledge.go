@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type NegativeAcknowledge struct {
 
 func NewNegativeAcknowledge(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != NegativeAcknowledgeLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", NegativeAcknowledgeLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", NegativeAcknowledgeLength, length)
 	}
 
 	message := &NegativeAcknowledge{

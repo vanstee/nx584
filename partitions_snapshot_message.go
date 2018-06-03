@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type PartitionsSnapshotMessage struct {
 
 func NewPartitionsSnapshotMessage(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != PartitionsSnapshotMessageLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", PartitionsSnapshotMessageLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", PartitionsSnapshotMessageLength, length)
 	}
 
 	message := &PartitionsSnapshotMessage{

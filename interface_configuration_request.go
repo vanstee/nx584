@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type InterfaceConfigurationRequest struct {
 
 func NewInterfaceConfigurationRequest(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != InterfaceConfigurationRequestLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", InterfaceConfigurationRequestLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", InterfaceConfigurationRequestLength, length)
 	}
 
 	message := &InterfaceConfigurationRequest{

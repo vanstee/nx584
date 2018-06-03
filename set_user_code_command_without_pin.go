@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type SetUserCodeCommandWithoutPin struct {
 
 func NewSetUserCodeCommandWithoutPin(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != SetUserCodeCommandWithoutPinLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", SetUserCodeCommandWithoutPinLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", SetUserCodeCommandWithoutPinLength, length)
 	}
 
 	message := &SetUserCodeCommandWithoutPin{

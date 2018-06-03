@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type PrimaryKeypadFunctionWithoutPin struct {
 
 func NewPrimaryKeypadFunctionWithoutPin(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != PrimaryKeypadFunctionWithoutPinLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", PrimaryKeypadFunctionWithoutPinLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", PrimaryKeypadFunctionWithoutPinLength, length)
 	}
 
 	message := &PrimaryKeypadFunctionWithoutPin{

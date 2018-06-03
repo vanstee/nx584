@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type UserInformationRequestWithoutPin struct {
 
 func NewUserInformationRequestWithoutPin(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != UserInformationRequestWithoutPinLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", UserInformationRequestWithoutPinLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", UserInformationRequestWithoutPinLength, length)
 	}
 
 	message := &UserInformationRequestWithoutPin{

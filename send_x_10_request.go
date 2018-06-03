@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type SendX10Request struct {
 
 func NewSendX10Request(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != SendX10RequestLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", SendX10RequestLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", SendX10RequestLength, length)
 	}
 
 	message := &SendX10Request{

@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type LogEventRequest struct {
 
 func NewLogEventRequest(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != LogEventRequestLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", LogEventRequestLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", LogEventRequestLength, length)
 	}
 
 	message := &LogEventRequest{

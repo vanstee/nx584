@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type SetClockCalendarCommand struct {
 
 func NewSetClockCalendarCommand(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != SetClockCalendarCommandLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", SetClockCalendarCommandLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", SetClockCalendarCommandLength, length)
 	}
 
 	message := &SetClockCalendarCommand{

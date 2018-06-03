@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type KeypadTerminalModeRequest struct {
 
 func NewKeypadTerminalModeRequest(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != KeypadTerminalModeRequestLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", KeypadTerminalModeRequestLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", KeypadTerminalModeRequestLength, length)
 	}
 
 	message := &KeypadTerminalModeRequest{

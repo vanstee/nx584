@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type SecondaryKeypadFunction struct {
 
 func NewSecondaryKeypadFunction(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != SecondaryKeypadFunctionLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", SecondaryKeypadFunctionLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", SecondaryKeypadFunctionLength, length)
 	}
 
 	message := &SecondaryKeypadFunction{

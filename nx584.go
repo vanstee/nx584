@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/tarm/serial"
@@ -17,13 +18,15 @@ const (
 )
 
 type Config struct {
-	Path string
-	Baud int
+	Path   string
+	Baud   int
+	Logger *log.Logger
 }
 
 type Client struct {
 	port    io.ReadWriteCloser
 	scanner *bufio.Scanner
+	logger  *log.Logger
 }
 
 func Open(config *Config) (*Client, error) {
@@ -45,9 +48,15 @@ func Open(config *Config) (*Client, error) {
 	scanner := bufio.NewScanner(port)
 	scanner.Split(ScanMessages)
 
+	logger := config.Logger
+	if logger == nil {
+		logger = log.New(os.Stdout, "", log.LstdFlags)
+	}
+
 	client := &Client{
 		port:    port,
 		scanner: scanner,
+		logger:  logger,
 	}
 
 	return client, nil
@@ -69,7 +78,7 @@ func (client *Client) ReadMessage() (Message, error) {
 		return nil, err
 	}
 
-	log.Printf("decoding message: %#v", bytes)
+	client.logger.Printf("decoding message: %#v", bytes)
 
 	message, err := DecodeMessage(bytes)
 	if err != nil {
@@ -85,7 +94,7 @@ func (client *Client) ReadMessage() (Message, error) {
 
 func (client *Client) WriteMessage(message Message) error {
 	bytes := EncodeMessage(message)
-	log.Printf("encoding message: %#v", bytes)
+	client.logger.Printf("encoding message: %#v", bytes)
 
 	ascii := strings.ToUpper(hex.EncodeToString(bytes))
 	line := fmt.Sprintf("\n%s\r", ascii)

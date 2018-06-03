@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type PositiveAcknowledge struct {
 
 func NewPositiveAcknowledge(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != PositiveAcknowledgeLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", PositiveAcknowledgeLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", PositiveAcknowledgeLength, length)
 	}
 
 	message := &PositiveAcknowledge{

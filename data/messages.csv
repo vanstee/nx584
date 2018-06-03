@@ -3,7 +3,7 @@ Number,Name,Length,Transition Capable,Acknowledged
 1,Interface Configuration Message,11,No,Possible
 2,Reserved,0,No,No
 3,Zone Name Message,18,No,No
-4,Zone Status Message,8,Yes,Possible
+4,Zone Status Message,10,Yes,Possible
 5,Zones Snapshot Message,10,Yes,Possible
 6,Partition Status Message,9,Yes,Possible
 7,Partitions Snapshot Message,9,Yes,Possible

@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type X10MessageReceived struct {
 
 func NewX10MessageReceived(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != X10MessageReceivedLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", X10MessageReceivedLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", X10MessageReceivedLength, length)
 	}
 
 	message := &X10MessageReceived{

@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ type SystemStatusMessage struct {
 
 func NewSystemStatusMessage(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != SystemStatusMessageLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", SystemStatusMessageLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", SystemStatusMessageLength, length)
 	}
 
 	message := &SystemStatusMessage{

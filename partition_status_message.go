@@ -4,7 +4,6 @@ package nx584
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -75,7 +74,7 @@ type PartitionStatusMessage struct {
 
 func NewPartitionStatusMessage(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
 	if length != PartitionStatusMessageLength {
-		log.Printf("message length incorrect: expected %d, actual: %d", PartitionStatusMessageLength, length)
+		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", PartitionStatusMessageLength, length)
 	}
 
 	message := &PartitionStatusMessage{
