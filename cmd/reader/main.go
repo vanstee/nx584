@@ -45,6 +45,8 @@ func main() {
 
 		switch req.(type) {
 		case *nx584.ZoneStatusMessage:
+			log.Printf("%s", req)
+
 			resp, err := nx584.NewPositiveAcknowledge(1, false, []byte{})
 			if err != nil {
 				log.Fatal(err)

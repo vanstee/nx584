@@ -14,7 +14,7 @@ function cleanup {
 trap cleanup EXIT
 
 echo "Waiting for remote forwarding..."
-sleep 10
+sleep 5
 
 echo "Local forwarding: $host:$port -> localhost:dev/ttyUSB0"
-socat PTY,raw,echo=0,link=dev/ttyUSB0 "tcp:$host:$port"
+socat -d -v PTY,raw,echo=0,link=dev/ttyUSB0 "tcp:$host:$port"

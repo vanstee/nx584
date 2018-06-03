@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"strings"
@@ -87,7 +88,8 @@ func (client *Client) WriteMessage(message Message) error {
 	log.Printf("encoding message: %#v", bytes)
 
 	ascii := strings.ToUpper(hex.EncodeToString(bytes))
-	_, err := client.port.Write([]byte(ascii))
+	line := fmt.Sprintf("\n%s\r", ascii)
+	_, err := client.port.Write([]byte(line))
 	if err != nil {
 		return err
 	}

@@ -22,7 +22,7 @@ func (port *FakePort) Close() error {
 
 func TestZoneStatusMessage(t *testing.T) {
 	port := &FakePort{}
-	input := strings.NewReader("0A8405015853E001000200249B")
+	input := strings.NewReader("0A8A52B9F7000006021004B494")
 	scanner := bufio.NewScanner(input)
 	client := Client{port, scanner}
 
@@ -30,8 +30,8 @@ func TestZoneStatusMessage(t *testing.T) {
 	if err != nil {
 		t.Errorf("client.ReadMessage() returned an error: %v", err)
 	}
-	if _, ok := req.(*ZoneStatusMessage); !ok {
-		t.Errorf("client.ReadMessage() did not return a message of type ZoneStatusMessage")
+	if _, ok := req.(*LogEventMessage); !ok {
+		t.Errorf("client.ReadMessage() did not return a message of type LogEventMessage")
 	}
 
 	resp, err := NewPositiveAcknowledge(1, false, []byte{})

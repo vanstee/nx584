@@ -5,7 +5,9 @@ import "fmt"
 const (
 	TransitionCapableNo  TransitionCapable = iota
 	TransitionCapableYes TransitionCapable = iota
+)
 
+const (
 	AcknowledgedNo       Acknowledged = iota
 	AcknowledgedPossible Acknowledged = iota
 	AcknowledgedYes      Acknowledged = iota
@@ -15,16 +17,7 @@ type TransitionCapable byte
 type Acknowledged byte
 type NewMessageFunc func(byte, bool, []byte) (Message, error)
 
-type MessageType interface {
-	Name() string
-	Length() byte
-	Number() byte
-	TransitionCapable() TransitionCapable
-	Acknowledged() Acknowledged
-}
-
 type Message interface {
-	Type() MessageType
 	Length() byte
 	Number() byte
 	AcknowledgeRequired() bool
