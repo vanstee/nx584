@@ -1,1 +1,65 @@
 Byte,Bit,Byte Name,Bit Name
+0,0,Partition Number,
+0,1,,
+0,2,,
+0,3,,
+0,4,,
+0,5,,
+0,6,,
+0,7,,
+1,0,Partition Condition Flags 1,Bypass Code Required
+1,1,,Fire Trouble
+1,2,,Fire
+1,3,,Pulsing Buzzer
+1,4,,TLM Fault Memory
+1,5,,Reserved
+1,6,,Armed
+1,7,,Instant
+2,0,Partition Condition Flags 2,Previous Alarm
+2,1,,Siren On
+2,2,,Steady Siren On
+2,3,,Alarm Memory
+2,4,,Tamper
+2,5,,Cancel Command Entered
+2,6,,Code Entered
+2,7,,Cancel Pending
+3,0,Partition Condition Flags 3,Reserved
+3,1,,Silent Exit Enabled
+3,2,,Entryguard
+3,3,,Chime Mode On
+3,4,,Entry
+3,5,,Delay Expiration Warning
+3,6,,Exit 1
+3,7,,Exit 2
+4,0,Partition Condition Flags 4,LED Extinguish
+4,1,,Cross Timing
+4,2,,Recent Closing Being Timed
+4,3,,Reserved
+4,4,,Exit Error Triggered
+4,5,,Auto Home Inhibited
+4,6,,Sensor Low Battery
+4,7,,Sensor Lost Supervision
+5,0,Last User Number,
+5,1,,
+5,2,,
+5,3,,
+5,4,,
+5,5,,
+5,6,,
+5,7,,
+6,0,Partition Condition Flags 5,Zone Bypassed
+6,1,,Force Arm Triggered By Auto Arm
+6,2,,Ready To Arm
+6,3,,Ready To Force Arm
+6,4,,Valid PIN Accepted
+6,5,,Chime On
+6,6,,Error Beep
+6,7,,Tone On
+7,0,Partition Condition Flags 6,Entry 1
+7,1,,Open Period
+7,2,,Alarm Sent Using Phone Number 1
+7,3,,Alarm Sent Using Phone Number 2
+7,4,,Alarm Sent Using Phone Number 3
+7,5,,Cancel Report Is In the Stack
+7,6,,Keyswitch Armed
+7,7,,Delay Trip In Progress
