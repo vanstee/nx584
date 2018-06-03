@@ -1,3 +1,5 @@
+//go:generate go run cmd/messagegen/main.go -in data -templates templates -out .
+
 package nx584
 
 import "fmt"
@@ -22,6 +24,7 @@ type Message interface {
 	Number() byte
 	AcknowledgeRequired() bool
 	Data() []byte
+	String() string
 }
 
 func NewMessage(length byte, number byte, acknowledgeRequired bool, data []byte) (Message, error) {

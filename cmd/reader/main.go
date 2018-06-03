@@ -43,10 +43,9 @@ func main() {
 			log.Fatalf("error reading message: %v", err)
 		}
 
-		switch req.(type) {
-		case *nx584.ZoneStatusMessage:
-			log.Printf("%s", req)
+		log.Printf(req.String())
 
+		if req.AcknowledgeRequired() {
 			resp, err := nx584.NewPositiveAcknowledge(1, false, []byte{})
 			if err != nil {
 				log.Fatal(err)
@@ -56,8 +55,6 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-		default:
-			log.Fatal("message type unknown")
 		}
 	}
 }

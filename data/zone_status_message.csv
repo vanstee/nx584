@@ -1,0 +1,57 @@
+Byte,Bit,Byte Name,Bit Name
+0,0,Zone Number,
+0,1,,
+0,2,,
+0,3,,
+0,4,,
+0,5,,
+0,6,,
+0,7,,
+1,0,Partition Mask,Partition 1 Enable
+1,1,,Partition 2 Enable
+1,2,,Partition 3 Enable
+1,3,,Partition 4 Enable
+1,4,,Partition 5 Enable
+1,5,,Partition 6 Enable
+1,6,,Partition 7 Enable
+1,7,,Partition 8 Enable
+2,0,Zone Type Flags 1,Fire
+2,1,,24 Hour
+2,2,,Key-switch
+2,3,,Follower
+2,4,,Entry / Exit Delay 1
+2,5,,Entry / Exit Delay 2
+2,6,,Interior
+2,7,,Local Only
+3,0,Zone Type Flags 2,Keypad Sounder
+3,1,,Yelping Siren
+3,2,,Steady Siren
+3,3,,Chime
+3,4,,Bypassable
+3,5,,Group Bypassable
+3,6,,Force Armable
+3,7,,Entry Guard
+4,0,Zone Type Flags 3,Fast Loop Response
+4,1,,Double EOL Tamper
+4,2,,Trouble 1
+4,3,,Cross Zone
+4,4,,Dialer Delay
+4,5,,Swinger Shutdown
+4,6,,Restorable
+4,7,,Listen In
+5,0,Zone Condition Flags 1,Faulted
+5,1,,Tampered
+5,2,,Trouble 2
+5,3,,Bypassed
+5,4,,Inhibited
+5,5,,Low Battery
+5,6,,Loss of Supervision
+5,7,,Reserved
+6,0,Zone Condition Flags 2,Alarm Memory
+6,1,,Bypass Memory
+6,2,,Reserved
+6,3,,Reserved
+6,4,,Reserved
+6,5,,Reserved
+6,6,,Reserved
+6,7,,Reserved

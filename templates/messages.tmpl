@@ -1,0 +1,9 @@
+package nx584
+
+var (
+	messages = map[byte]NewMessageFunc{
+		{{- range .}}
+		{{.FieldifiedName}}Number: New{{.FieldifiedName}},
+		{{- end}}
+	}
+)

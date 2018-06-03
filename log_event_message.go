@@ -1,11 +1,17 @@
+// DO NOT EDIT -- This file was generated from templates/message.tmpl
+
 package nx584
 
-import "log"
+import (
+	"fmt"
+	"log"
+	"strings"
+)
 
 const (
 	LogEventMessageName              = "Log Event Message"
 	LogEventMessageLength            = 10
-	LogEventMessageNumber            = 0x0A
+	LogEventMessageNumber            = 10
 	LogEventMessageTransitionCapable = TransitionCapableYes
 	LogEventMessageAcknowledged      = AcknowledgedPossible
 )
@@ -35,5 +41,10 @@ func (m *LogEventMessage) Number() byte {
 }
 
 func (m *LogEventMessage) String() string {
-	return LogEventMessageName
+	return fmt.Sprintf(
+		`%s
+                    %s`,
+		"Log Event Message",
+		strings.Repeat("-", len("Log Event Message")),
+	)
 }
