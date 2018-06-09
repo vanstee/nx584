@@ -1,9 +1,23 @@
-package nx584
+package messages
+
+import (
+	"fmt"
+
+	"github.com/vanstee/nx584/message"
+)
 
 var (
-	messages = map[byte]NewMessageFunc{
+	messages = map[byte]message.NewMessageFunc{
 		{{- range .}}
 		{{.FieldifiedName}}Number: New{{.FieldifiedName}},
 		{{- end}}
 	}
 )
+
+func New(length byte, number byte, acknowledgeRequired bool, data []byte) (message.Message, error) {
+	newMessageFunc, ok := messages[number]
+	if !ok {
+		return nil, fmt.Errorf("message number %v unknown", number)
+	}
+	return newMessageFunc(length, acknowledgeRequired, data)
+}

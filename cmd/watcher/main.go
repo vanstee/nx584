@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/vanstee/nx584"
+	"github.com/vanstee/nx584/message"
+	"github.com/vanstee/nx584/messages"
 )
 
 const (
@@ -55,7 +57,7 @@ func main() {
 	}
 	defer client.Close()
 
-	messages := make(chan nx584.Message, 0)
+	messagec := make(chan message.Message, 0)
 	errc := make(chan error, 1)
 
 	go func() {
@@ -66,16 +68,16 @@ func main() {
 				return
 			}
 
-			messages <- message
+			messagec <- message
 		}
 	}()
 
 	handleStale := true
 	for handleStale {
 		select {
-		case req := <-messages:
+		case req := <-messagec:
 			if req.AcknowledgeRequired() {
-				resp, err := nx584.NewPositiveAcknowledge(1, false, []byte{})
+				resp, err := messages.NewPositiveAcknowledge(1, false, []byte{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -94,7 +96,7 @@ func main() {
 
 	zones := make(map[byte]*Zone)
 	for i := 0; i < MaxZones; i++ {
-		req, err := nx584.NewZoneNameRequest(2, false, []byte{byte(i)})
+		req, err := messages.NewZoneNameRequest(2, false, []byte{byte(i)})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -105,8 +107,8 @@ func main() {
 		}
 
 		select {
-		case resp := <-messages:
-			if _, ok := resp.(*nx584.ZoneNameMessage); !ok {
+		case resp := <-messagec:
+			if _, ok := resp.(*messages.ZoneNameMessage); !ok {
 				log.Fatal("expected zone name message")
 			}
 
@@ -120,7 +122,7 @@ func main() {
 			}
 		}
 
-		req, err = nx584.NewZoneStatusRequest(2, false, []byte{byte(i)})
+		req, err = messages.NewZoneStatusRequest(2, false, []byte{byte(i)})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -131,8 +133,8 @@ func main() {
 		}
 
 		select {
-		case resp := <-messages:
-			status, ok := resp.(*nx584.ZoneStatusMessage)
+		case resp := <-messagec:
+			status, ok := resp.(*messages.ZoneStatusMessage)
 			if !ok {
 				log.Fatal("expected zone status message")
 			}
@@ -163,32 +165,32 @@ func main() {
 
 	for {
 		select {
-		case req := <-messages:
-			switch message := req.(type) {
-			case *nx584.ZoneStatusMessage:
-				zone := zones[message.ZoneNumber]
+		case req := <-messagec:
+			switch m := req.(type) {
+			case *messages.ZoneStatusMessage:
+				zone := zones[m.ZoneNumber]
 
-				if message.Faulted == 0x1 {
+				if m.Faulted == 0x1 {
 					zone.State = StateFaulted
-				} else if message.Tampered == 0x1 {
+				} else if m.Tampered == 0x1 {
 					zone.State = StateTampered
-				} else if message.Bypassed == 0x1 {
+				} else if m.Bypassed == 0x1 {
 					zone.State = StateBypassed
-				} else if message.Inhibited == 0x1 {
+				} else if m.Inhibited == 0x1 {
 					zone.State = StateInhibited
 				} else {
 					zone.State = StateNormal
 				}
 
 				log.Printf("%17s %s", fmt.Sprintf("%s:", zone.Name), zone.State)
-			case *nx584.PartitionStatusMessage:
+			case *messages.PartitionStatusMessage:
 				// ignore
 			default:
 				log.Printf("unexpected message number %s", req.Number())
 			}
 
 			if req.AcknowledgeRequired() {
-				resp, err := nx584.NewPositiveAcknowledge(1, false, []byte{})
+				resp, err := messages.NewPositiveAcknowledge(1, false, []byte{})
 				if err != nil {
 					log.Fatal(err)
 				}

@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"github.com/vanstee/nx584"
+	"github.com/vanstee/nx584/message"
+	"github.com/vanstee/nx584/messages"
 )
 
 func main() {
@@ -35,7 +37,7 @@ func main() {
 	}
 	defer client.Close()
 
-	messages := make(chan nx584.Message, 0)
+	messagec := make(chan message.Message, 0)
 	errc := make(chan error, 1)
 
 	go func() {
@@ -46,7 +48,7 @@ func main() {
 				return
 			}
 
-			messages <- message
+			messagec <- message
 		}
 	}()
 
@@ -54,9 +56,9 @@ func main() {
 	handleStale := true
 	for handleStale {
 		select {
-		case req := <-messages:
+		case req := <-messagec:
 			if req.AcknowledgeRequired() {
-				resp, err := nx584.NewPositiveAcknowledge(1, false, []byte{})
+				resp, err := messages.NewPositiveAcknowledge(1, false, []byte{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -75,7 +77,7 @@ func main() {
 	}
 	log.Printf("done handling stale messages")
 
-	req, err := nx584.NewZonesSnapshotRequest(2, false, []byte{0x0})
+	req, err := messages.NewZonesSnapshotRequest(2, false, []byte{0x0})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -88,8 +90,8 @@ func main() {
 
 	log.Printf("waiting for zones snapshot message")
 	select {
-	case resp := <-messages:
-		if _, ok := resp.(*nx584.ZonesSnapshotMessage); !ok {
+	case resp := <-messagec:
+		if _, ok := resp.(*messages.ZonesSnapshotMessage); !ok {
 			log.Fatal("expected zones snapshot message")
 		}
 
@@ -101,7 +103,7 @@ func main() {
 	}
 
 	for i := 0; i < 16; i++ {
-		req, err := nx584.NewZoneNameRequest(2, false, []byte{byte(i)})
+		req, err := messages.NewZoneNameRequest(2, false, []byte{byte(i)})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -114,8 +116,8 @@ func main() {
 
 		log.Printf("waiting for zone name message")
 		select {
-		case resp := <-messages:
-			if _, ok := resp.(*nx584.ZoneNameMessage); !ok {
+		case resp := <-messagec:
+			if _, ok := resp.(*messages.ZoneNameMessage); !ok {
 				log.Fatal("expected zone name message")
 			}
 
@@ -138,7 +140,7 @@ func main() {
 			}
 		}
 
-		req, err = nx584.NewZoneStatusRequest(2, false, []byte{byte(i)})
+		req, err = messages.NewZoneStatusRequest(2, false, []byte{byte(i)})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -151,8 +153,8 @@ func main() {
 
 		log.Printf("waiting for zone status message")
 		select {
-		case resp := <-messages:
-			if _, ok := resp.(*nx584.ZoneStatusMessage); !ok {
+		case resp := <-messagec:
+			if _, ok := resp.(*messages.ZoneStatusMessage); !ok {
 				log.Fatal("expected zone status message")
 			}
 

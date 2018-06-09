@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/vanstee/nx584"
+	"github.com/vanstee/nx584/messages"
 )
 
 func main() {
@@ -46,7 +47,7 @@ func main() {
 		log.Printf(req.String())
 
 		if req.AcknowledgeRequired() {
-			resp, err := nx584.NewPositiveAcknowledge(1, false, []byte{})
+			resp, err := messages.NewPositiveAcknowledge(1, false, []byte{})
 			if err != nil {
 				log.Fatal(err)
 			}

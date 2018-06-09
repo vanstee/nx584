@@ -1,16 +1,15 @@
+//go:generate go run cmd/messagegen/main.go -in data -templates templates -out messages
+
 package nx584
 
 import (
-	"bufio"
-	"encoding/hex"
-	"errors"
-	"fmt"
 	"io"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/tarm/serial"
+	"github.com/vanstee/nx584/message"
+	"github.com/vanstee/nx584/stream"
 )
 
 const (
@@ -25,8 +24,9 @@ type Config struct {
 
 type Client struct {
 	port    io.ReadWriteCloser
-	scanner *bufio.Scanner
 	logger  *log.Logger
+	decoder *stream.Decoder
+	encoder *stream.Encoder
 }
 
 func Open(config *Config) (*Client, error) {
@@ -45,9 +45,6 @@ func Open(config *Config) (*Client, error) {
 		return nil, err
 	}
 
-	scanner := bufio.NewScanner(port)
-	scanner.Split(ScanMessages)
-
 	logger := config.Logger
 	if logger == nil {
 		logger = log.New(os.Stdout, "", log.LstdFlags)
@@ -55,55 +52,25 @@ func Open(config *Config) (*Client, error) {
 
 	client := &Client{
 		port:    port,
-		scanner: scanner,
 		logger:  logger,
+		decoder: stream.NewDecoder(port),
+		encoder: stream.NewEncoder(port),
 	}
 
 	return client, nil
 }
 
-func (client *Client) ReadMessage() (Message, error) {
-	more := client.scanner.Scan()
-	if !more {
-		return nil, io.EOF
-	}
-
-	ascii := client.scanner.Text()
-	if len(ascii) == 0 {
-		return nil, errors.New("message was empty")
-	}
-
-	bytes, err := hex.DecodeString(ascii)
+func (client *Client) ReadMessage() (message.Message, error) {
+	var m message.Message
+	err := client.decoder.Decode(&m)
 	if err != nil {
 		return nil, err
 	}
-
-	client.logger.Printf("decoding message: %#v", bytes)
-
-	message, err := DecodeMessage(bytes)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := client.scanner.Err(); err != nil {
-		return nil, err
-	}
-
-	return message, err
+	return m, nil
 }
 
-func (client *Client) WriteMessage(message Message) error {
-	bytes := EncodeMessage(message)
-	client.logger.Printf("encoding message: %#v", bytes)
-
-	ascii := strings.ToUpper(hex.EncodeToString(bytes))
-	line := fmt.Sprintf("\n%s\r", ascii)
-	_, err := client.port.Write([]byte(line))
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (client *Client) WriteMessage(m message.Message) error {
+	return client.encoder.Encode(m)
 }
 
 func (client *Client) Close() error {

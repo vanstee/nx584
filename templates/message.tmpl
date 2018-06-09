@@ -1,22 +1,24 @@
 // DO NOT EDIT -- This file was generated from templates/message.tmpl
 
-package nx584
+package messages
 
 import (
 	"fmt"
 	"strings"
+
+	"github.com/vanstee/nx584/message"
 )
 
 const (
 	{{.FieldifiedName}}Name								= "{{.Name}}"
 	{{.FieldifiedName}}Length							= {{.Length}}
 	{{.FieldifiedName}}Number							= {{.Number}}
-	{{.FieldifiedName}}TransitionCapable	= TransitionCapable{{.TransitionCapable}}
-	{{.FieldifiedName}}Acknowledged				= Acknowledged{{.Acknowledged}}
+	{{.FieldifiedName}}TransitionCapable	= message.TransitionCapable{{.TransitionCapable}}
+	{{.FieldifiedName}}Acknowledged				= message.Acknowledged{{.Acknowledged}}
 )
 
 type {{.FieldifiedName}} struct {
-	*BaseMessage
+	*message.Base
 	{{- range .DataByteFields}}
 	{{.FieldifiedName}} byte
 	{{- end}}
@@ -25,17 +27,13 @@ type {{.FieldifiedName}} struct {
 	{{- end}}
 }
 
-func New{{.FieldifiedName}}(length byte, acknowledgeRequired bool, data []byte) (Message, error) {
+func New{{.FieldifiedName}}(length byte, acknowledgeRequired bool, data []byte) (message.Message, error) {
 	if length != {{.FieldifiedName}}Length {
 		return nil, fmt.Errorf("message length incorrect: expected %d, actual: %d", {{.FieldifiedName}}Length, length)
 	}
 
 	message := &{{.FieldifiedName}}{
-		BaseMessage: &BaseMessage{
-			length:							length,
-			acknowledgeRequired: acknowledgeRequired,
-			data:								data,
-		},
+		Base: message.NewBase(length, acknowledgeRequired, data),
 		{{- range .DataByteFields}}
 		{{$byte := .Byte}}
 		{{.FieldifiedName}}: data[{{$byte}}],
