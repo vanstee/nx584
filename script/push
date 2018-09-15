@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -eoux pipefail
+
+BUILD=${BUILD:-"test"}
+BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER:-"local"}
+
+if [ "$BUILD" = "test" ]; then
+  # docker push nx584-test:${BUILD_NUMBER}
+  echo "docker push nx584-test:${BUILD_NUMBER}"
+
+  # citool build-status pending
+  echo "citool build-status pending"
+fi
+
+if [ "$BUILD" = "production" ]; then
+  # docker push nx584:${BUILD_NUMBER}
+  echo "docker push nx584:${BUILD_NUMBER}"
+
+  LINT_EXIT_STATUS=$(buildkite-agent meta-data get "lint-exit-status")
+  TEST_EXIT_STATUS=$(buildkite-agent meta-data get "test-exit-status")
+
+  BUILD_STATUS="success"
+  if [ "$LINT_EXIT_STATUS" -ne 0 ]; then
+    BUILD_STATUS="failure"
+  fi
+  if [ "$TEST_EXIT_STATUS" -ne 0 ]; then
+    TEST_STATUS="failure"
+  fi
+
+  # citool build-status $BUILD_STATUS
+  echo "citool build-status $BUILD_STATUS"
+fi

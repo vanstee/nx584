@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -eoux pipefail
+
+go tool vet -all -v .
+exit 1

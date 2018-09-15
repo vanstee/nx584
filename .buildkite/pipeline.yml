@@ -1,29 +1,43 @@
 steps:
-  - label: Build test container
-    command: >
-      docker build \
-        --tag nx584-test:${BUILDKITE_BUILD_NUMBER} \
-        --target test \
-        .
+  - label: Build
+    command: |
+      echo "--- Build test container"
+      script/build
+
+      echo "--- Push test container"
+      script/push
+    env:
+      BUILD: test
 
   - wait
 
-  - label: Run linter
-    command: >
-      docker run nx584-test:${BUILDKITE_BUILD_NUMBER} \
-        go tool vet -all -v .
+  - label: Lint
+    command: |
+      set +e
+      docker run nx584-test:${BUILDKITE_BUILD_NUMBER} script/lint
+      EXIT_STATUS="$$?"
+      buildkite-agent meta-data set "lint-exit-status" $$EXIT_STATUS
+      set -e
+      exit $$EXIT_STATUS
 
-  - label: Run tests
-    command: >
-      docker run nx584-test:${BUILDKITE_BUILD_NUMBER} \
-        go test -v
+  - label: Test
+    command: |
+      set +e
+      docker run nx584-test:${BUILDKITE_BUILD_NUMBER} script/test
+      EXIT_STATUS="$$?"
+      buildkite-agent meta-data set "test-exit-status" $$EXIT_STATUS
+      set -e
+      exit $$EXIT_STATUS
 
-  - wait
+  - wait: ~
+    continue_on_failure: true
 
-  - label: Build production container
-    command: >
-      docker build \
-        --tag nx584:${BUILDKITE_BUILD_NUMBER} \
-        --target production \
-        --cache-from=nx584-test:${BUILDKITE_BUILD_NUMBER} \
-        .
+  - label: Push
+    command: |
+      echo "--- Build production container"
+      script/build
+
+      echo "--- Push production container"
+      script/push
+    env:
+      BUILD: production

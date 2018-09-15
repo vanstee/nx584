@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -eoux pipefail
+
+BUILD=${BUILD:-"test"}
+BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER:-"local"}
+
+if [ "$BUILD" = "test" ]; then
+  docker build \
+    --tag nx584-test:${BUILD_NUMBER} \
+    --target test \
+    .
+fi
+
+if [ "$BUILD" = "production" ]; then
+  docker build \
+    --tag nx584:${BUILD_NUMBER} \
+    --target production \
+    --cache-from=nx584-test:${BUILD_NUMBER} \
+    .
+fi
