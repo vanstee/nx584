@@ -1,3 +1,29 @@
 steps:
-  - label: Example Test
-    command: echo "Hello!"
+  - label: Build test container
+    command: >
+      docker build \
+        --tag nx584-test:${BUILDKITE_BUILD_NUMBER} \
+        --target test \
+        .
+
+  - wait
+
+  - label: Run linter
+    command: >
+      docker run nx584-test:${BUILDKITE_BUILD_NUMBER} \
+        go tool vet -all -v .
+
+  - label: Run tests
+    command: >
+      docker run nx584-test:${BUILDKITE_BUILD_NUMBER} \
+        go test -v
+
+  - wait
+
+  - label: Build production container
+    command: >
+      docker build \
+        --tag nx584:${BUILDKITE_BUILD_NUMBER} \
+        --target production \
+        --cache-from=nx584-test:${BUILDKITE_BUILD_NUMBER} \
+        .
