@@ -108,9 +108,9 @@ func NewPartitionStatusMessage(length byte, acknowledgeRequired bool, data []byt
 		Entryguard:               (data[3] >> 2) & 0x1,
 		ChimeModeOn:              (data[3] >> 3) & 0x1,
 		Entry:                    (data[3] >> 4) & 0x1,
-		DelayExpirationWarning: (data[3] >> 5) & 0x1,
-		Exit1: (data[3] >> 6) & 0x1,
-		Exit2: (data[3] >> 7) & 0x1,
+		DelayExpirationWarning:   (data[3] >> 5) & 0x1,
+		Exit1:                    (data[3] >> 6) & 0x1,
+		Exit2:                    (data[3] >> 7) & 0x1,
 
 		PartitionConditionFlags4: data[4],
 		LedExtinguish:            (data[4] >> 0) & 0x1,
@@ -133,7 +133,7 @@ func NewPartitionStatusMessage(length byte, acknowledgeRequired bool, data []byt
 		ErrorBeep:                  (data[6] >> 6) & 0x1,
 		ToneOn:                     (data[6] >> 7) & 0x1,
 
-		PartitionConditionFlags6: data[7],
+		PartitionConditionFlags6:   data[7],
 		Entry1:                     (data[7] >> 0) & 0x1,
 		OpenPeriod:                 (data[7] >> 1) & 0x1,
 		AlarmSentUsingPhoneNumber1: (data[7] >> 2) & 0x1,
